@@ -84,6 +84,7 @@
                                 "<button class='btn btn-warning' data-toggle='modal' data-target='#myModal' data-update='"+true+"' data-id='"+row.id+"'>修改</button> "+
                                 "<button class='btn btn-danger' onclick=\"del('"+row.id+"')\">删除</button> ";
                         }else{
+
                             content =
                                 "<button class='btn btn-warning' data-toggle='modal' data-target='#myModal' data-update='" + true + "' data-id='" + row.id + "'>修改</button> " +
                                 "<button class='btn btn-danger' onclick=\"del('" + row.id + "')\">删除</button> ";
@@ -107,6 +108,7 @@
         $("#label1").text(title);
         $("#desc1").text(description);
     }
+
 
     //搜索
 
@@ -265,3 +267,5 @@
         </div>
     </div>
 </div>
+<%--
+///1111--%>
