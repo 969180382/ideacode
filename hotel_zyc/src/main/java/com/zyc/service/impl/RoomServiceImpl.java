@@ -24,7 +24,6 @@ public class RoomServiceImpl implements RoomService {
     @Transactional(propagation = Propagation.SUPPORTS)
     public Map<String, Object> findByPage(Integer page, Integer rows,String type,String number,String status) {
         HashMap<String, Object> result = new HashMap<>();
-        List<Room> room1 = roomMapper.search(type,number,status);
         //开启分页插件
         PageHelper.startPage(page,rows);
         List<Room> rooms = roomMapper.search(type,number,status);
@@ -40,5 +39,28 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public void addRoom(Room room) {
         roomMapper.insert(room);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public Room findRoomAndType(String id) {
+        Room room = roomMapper.selectRoomAndType(id);
+        return room;
+    }
+
+    @Override
+    public void update(Room room) {
+        roomMapper.updateByPrimaryKeySelective(room);
+    }
+
+    @Override
+    public void delete(String id) {
+        roomMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public Room findById(String id) {
+        Room room = roomMapper.selectByPrimaryKey(id);
+        return room;
     }
 }

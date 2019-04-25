@@ -10,4 +10,5 @@ import java.util.List;
 public interface RoomMapper extends Mapper<Room> {
 
     List<Room> search(@Param("type") String type ,@Param("number") String number,@Param("status") String status);
+    Room selectRoomAndType(String id);
 }

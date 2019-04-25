@@ -6,12 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 public class Room {
+    @Id
     private String id;
 
     private String type;
@@ -27,5 +30,7 @@ public class Room {
     private String remark;
 
     private String roomtypeId;
+    @Transient
+    private RoomType roomType;
 
 }

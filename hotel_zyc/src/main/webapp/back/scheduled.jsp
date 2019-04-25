@@ -1,5 +1,6 @@
 <%@page isELIgnored="false" contentType="text/html; utf-8" pageEncoding="UTF-8" %>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <style>
     .page-header{
         margin-top: 0px;
@@ -19,7 +20,7 @@
         })
         //创建表格
         $("#list").jqGrid({
-            url: "${pageContext.request.contextPath}/room/findAll",
+            url: "${pageContext.request.contextPath}/scheduled/findAll",
             styleUI: 'Bootstrap',//使用bootstrap风格样式
             datatype: "json",
             autowidth: true,
@@ -27,29 +28,34 @@
             height : "65%",
             hiddengrid: false,
             viewrecords: true,
-            //altRows:true,奇偶行颜色
+            altRows:true,//奇偶行颜色
             rowNum: 10,
-            colNames: ["房间类型", "房号", "房间状态","更新时间","备注信息","操作"],
+            colNames: ["房间类型", "房号", "预定时间","预定入住时间","预定人","性别","电话","证件号码","预定状态","预约方式","押金","价格","操作"],
             colModel: [
-                {name: "type", editable: true,sortable:false},
-                {name: "number", editable: true,sortable:true},
+                {name: "roomType.type", editable: true,sortable:false},
+                {name: "room.number", editable: true,sortable:true},
+                {name: "scheduledTime", editable: true,search:false,sortable:false},
+                {name: "checkinTime", editable: true,search:false,sortable:false},
+                {name: "scheduler", editable: true,sortable:false},
+                {name: "sex", editable: true,search:false,sortable:false},
+                {name: "phone", editable: true,sortable:false},
+                {name: "idCard", editable: true,sortable:false},
                 {name: "status", editable: true,sortable:false},
-                {name: "updateTime", editable: true,search:false,sortable:false},
-                {name: "remark", editable: true,search:false,sortable:false},
+                {name: "mode", editable: true,sortable:false},
+                {name: "roomType.deposit", editable: true,search:false,sortable:false},
+                {name: "price", editable: true,search:false,sortable:false},
                 {
-                    name: "options",width:230,search:false,sortable:false,
+                    name: "options",width:335,search:false,sortable:false,
                     formatter: function (value, options, row) {
                         var content;
-                        if (row.status=="空闲房") {
+                        if (row.status=="预定成功") {
                             content =
-                                "<button class='btn btn-default' data-toggle='modal' data-target='#myModal2' onclick=\"details('"+row.id+"')\">详情</button> "+
-                                "<button class='btn btn-default' onclick=\"destine('"+row.id+"')\">预定</button> "+
                                 "<button class='btn btn-default' onclick=\"checkIn('"+row.id+"')\">入住</button> "+
-                                "<button class='btn btn-default' data-toggle='modal' data-target='#myModal1' onclick=\"details('"+row.id+"')\">修改</button> "+
+                                "<button class='btn btn-default' onclick=\"cancel('"+row.id+"')\">取消</button> "+
+                                "<button class='btn btn-default' onclick=\"modify('"+row.id+"')\">修改</button> "+
                                 "<button class='btn btn-danger' onclick=\"del('"+row.id+"')\">删除</button> ";
                         }else{
                             content =
-                                "<button class='btn btn-default' data-toggle='modal' data-target='#myModal2' onclick=\"details('"+row.id+"')\">详情</button> "+
                                 "<button class='btn btn-default' data-toggle='modal' data-target='#myModal1' onclick=\"details('"+row.id+"')\">修改</button> "+
                                 "<button class='btn btn-danger' onclick=\"del('"+row.id+"')\">删除</button> ";
                         }
@@ -64,13 +70,13 @@
                 var rowDatas = $("#list").jqGrid("getRowData");//获取所有行的数据
                 for (var ii = 0; ii < rowDatas.length; ii++) {
                     var rowData = rowDatas[ii];
-                    if (rowData.status == "空闲房") {
+                    if (rowData.status == "预定成功") {
                         $("#" + ids[ii] + " td").css("background-color", "#D1EEEE");
                     }
                     if (rowData.status == "已入住") {
                         $("#" + ids[ii] + " td").css("background-color", "#ebc8ee");
                     }
-                    if (rowData.status == "已预定") {
+                    if (rowData.status == "已取消") {
                         $("#" + ids[ii] + " td").css("background-color", "#EEEED1");
                     }
                 }
@@ -78,13 +84,11 @@
 
         }).jqGrid("navGrid", "#pager", {edit: false, add: false, del: false, search: true, refresh: false});
     })
-    //房间删除
+    //预定记录删除
     function del(id) {
-        if(confirm("确定要删除吗？？？")==true){
-            $.post("${pageContext.request.contextPath}/room/delete",{id:id},function () {
-                $("#list").trigger("reloadGrid");
-            });
-        }
+        $.post("${pageContext.request.contextPath}/room/delete",{id:id},function () {
+            $("#list").trigger("reloadGrid");
+        });
     }
     //房间信息修改
     $("#save1").click(function () {
@@ -93,29 +97,18 @@
             $("#list").trigger("reloadGrid");
         })
     })
-    //房间预定
-    function destine(id){
-        $("#myModal3").modal("show");
-        $("#number3").attr("value",id);
-    }
-    $("#save3").click(function () {
-        var data = $('#form3').serialize();//将表单数据表单序列化
-        $.post("${pageContext.request.contextPath}/scheduled/add",data,function () {
+    //预定取消
+    function cancel(id){
+        $.post("${pageContext.request.contextPath}/scheduled/cancel",{id:id},function () {
             $("#list").trigger("reloadGrid");
-        })
-    })
+        });
+    }
     //房间入住
     function checkIn(id){
-        $("#myModal4").modal("show");
-        $("#roomId").attr("value",id);
-    }
-    $("#save4").click(function () {
-        var data = $('#form4').serialize();//将表单数据表单序列化
-        $.post("${pageContext.request.contextPath}/checkIn/add",data,function () {
+        $.post("${pageContext.request.contextPath}/checkIn/add1",{id:id},function () {
             $("#list").trigger("reloadGrid");
         })
-    })
-
+    }
     //房间类型回显
     $("#add").click(function () {
         $.post("${pageContext.request.contextPath}/roomType/findAll",function (aaa) {
@@ -163,18 +156,6 @@
             })
         })
     }
-    function myselect() {
-        if($("#mode").val()=="钟点房"){
-            $("#qqq").attr("hidden",false);
-        }else(
-            $("#qqq").attr("hidden",true)
-        )
-        if($("#mode1").val()=="钟点房"){
-            $("#qqq1").attr("hidden",false);
-        }else(
-            $("#qqq1").attr("hidden",true)
-        )
-    }
     //更改日期格式
     $("#checkinTime1").blur(function () {
         var x=document.getElementById("checkinTime1").value;
@@ -196,9 +177,7 @@
         </div>
         <%--标签页开始--%>
         <ul id="myTab" class="nav nav-tabs">
-            <li class="active"><a href="#roomlist" data-toggle="tab">房间列表</a></li>
-            <li><a href="#addRoom" data-toggle="tab" id="add">添加房间</a></li>
-            <%--<li><a href="" data-toggle="tab" id="search">搜索房间</a></li>--%>
+            <li class="active"><a href="#roomlist" data-toggle="tab">预定列表</a></li>
         </ul>
         <div id="myTabContent" class="tab-content">
             <%--表格--%>
@@ -208,53 +187,6 @@
                         <table id="list"></table>
                         <div id="pager" style="height: 30px"></div>
                     </div>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="addRoom">
-                <div class="row">
-                    <div class="col-sm-2"></div>
-                    <div class="col-sm-5">
-                        <br/>
-                        <br/>
-                        <form action="javascript:" enctype="multipart/form-data" id="form">
-                            <div class="form-group">
-                                <div class="row ">
-                                    <label for="type" class="col-sm-2 control-label">房间类型:</label>
-                                    <div class="col-sm-10">
-                                        <select class="form-control" name="roomtypeId" id="type">
-                                            <option>单人房</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr/>
-                            <div class="form-group">
-                                <div class="row">
-                                    <label for="number" class="col-sm-2 control-label">房号:</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" id="number" name="number" class="form-control"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr/>
-                            <div class="form-group">
-                                <div class="row">
-                                    <label for="remark" class="col-sm-2 control-label">备注信息:</label>
-                                    <div class="col-sm-10">
-                                        <textarea class="form-control" rows="3" id="remark" name="remark"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr/>
-                            <div class="form-group">
-                                <div class="col-sm-offset-8 col-sm-4">
-                                    <button type="submit" class="btn btn-primary" id="baocun">保存</button>
-                                    <button type="button" class="btn btn-warning">取消</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-sm-5"></div>
                 </div>
             </div>
         </div>

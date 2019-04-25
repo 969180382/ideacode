@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="${app}/statics/jqgrid/css/trirand/ui.jqgrid-bootstrap.css">
     <script src="${app}/statics/boot/js/jquery-3.3.1.min.js"></script>
     <script src="${app}/statics/boot/js/bootstrap.min.js"></script>
-    <script src="${app}/statics/jqgrid/js/trirand/jquery.jqGrid.min(1).js"></script>
+    <script src="${app}/statics/jqgrid/js/trirand/jquery.jqGrid.min.js"></script>
     <script src="${app}/statics/jqgrid/js/trirand/i18n/grid.locale-cn.js"></script>
     <script>
 
@@ -74,7 +74,7 @@
                                 <div class="panel-body">
                                     <ul class="nav nav-pills nav-stacked">
                                         <li><a href="javascript:$('#centerLayout').load('${app}/back/room.jsp')"><span class="glyphicon glyphicon-play"></span>  房间查询</a></li>
-                                        <li><a href="javascript:$('#centerLayout').load('')"><span class="glyphicon glyphicon-play"></span>  预定列表</a></li>
+                                        <li><a href="javascript:$('#centerLayout').load('${app}/back/scheduled.jsp')"><span class="glyphicon glyphicon-play"></span>  预定列表</a></li>
                                         <li><a href="javascript:$('#centerLayout').load('')"><span class="glyphicon glyphicon-play"></span>  入住记录</a></li>
                                         <li><a href="javascript:$('#centerLayout').load('')"><span class="glyphicon glyphicon-play"></span>  房间类型</a></li>
                                     </ul>

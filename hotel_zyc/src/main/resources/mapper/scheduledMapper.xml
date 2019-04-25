@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zyc.dao.ScheduledMapper">
+    <select id="search" resultMap="aa">
+        select s.id,
+               r.id as r_id,
+               t.id as t_id,
+               t.type,
+               r.number,
+               s.scheduled_time,
+               s.checkin_time,
+               s.scheduler,
+               s.sex,
+               s.phone,
+               s.id_card,
+               s.status,
+               s.mode,
+               t.deposit,
+               s.price
+        from scheduled s
+        left join room r on s.number=r.id
+        left join room_type t on r.roomtype_id=t.id
+        <where>
+            <if test="type !='' and type != null">
+                t.type like concat(concat("%",#{type}),"%")
+            </if>
+            <if test="number !='' and number != null">
+                and r.number like concat(concat("%",#{number}),"%")
+            </if>
+            <if test="name !='' and name != null">
+                and s.scheduler like concat(concat("%",#{name}),"%")
+            </if>
+            <if test="phone !='' and phone != null">
+                and s.phone like concat(concat("%",#{phone}),"%")
+
+            </if>
+            <if test="mode !='' and mode != null">
+                and s.mode like concat(concat("%",#{mode}),"%")
+            </if>
+            <if test="idCard !='' and idCard != null">
+                and s.id_card like concat(concat("%",#{idCard}),"%")
+            </if>
+            <if test="status !='' and status != null">
+                and s.status like concat(concat("%",#{status}),"%")
+            </if>
+        </where>
+    </select>
+
+    <resultMap id="aa" type="com.zyc.entity.Scheduled">
+        <id property="id" column="id"/>
+        <result property="scheduledTime" column="scheduled_time"/>
+        <result property="checkinTime" column="checkin_time"/>
+        <result property="scheduler" column="scheduler"/>
+        <result property="sex" column="sex"/>
+        <result property="phone" column="phone"/>
+        <result property="idCard" column="id_card"/>
+        <result property="status" column="status"/>
+        <result property="mode" column="mode"/>
+        <result property="price" column="price"/>
+        <association property="room" javaType="com.zyc.entity.Room">
+            <id property="id" column="r_id"/>
+            <result property="number" column="number"/>
+        </association>
+        <association property="roomType" javaType="com.zyc.entity.RoomType">
+            <id property="id" column="t_id"/>
+            <result property="type" column="type"/>
+            <result property="deposit" column="deposit"/>
+        </association>
+    </resultMap>
+</mapper>

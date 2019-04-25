@@ -21,6 +21,7 @@ public class RoomController {
     private RoomService roomService;
     @Autowired
     private RoomTypeService roomTypeService;
+    //分页展示所有&&条件查询
     @RequestMapping("findAll")
     public Map<String,Object> findByPage(Integer page, Integer rows,String searchField,String searchString){
         String type = null;
@@ -36,6 +37,7 @@ public class RoomController {
         Map<String, Object> map = roomService.findByPage(page, rows,type,number,status);
         return map;
     }
+    //房间添加
     @RequestMapping("addRoom")
     public void addRoom(Room room){
         RoomType r = roomTypeService.findOne(room.getRoomtypeId());
@@ -45,5 +47,24 @@ public class RoomController {
         room.setStatus("空闲房");
         room.setUpdateTime(new Date());
         roomService.addRoom(room);
+    }
+    //查询房间详细信息
+    @RequestMapping("findRoomAndType")
+    public Room findRoomAndType(String id){
+        Room room = roomService.findRoomAndType(id);
+        return room;
+    }
+    //修改房间信息
+    @RequestMapping("updateRoom")
+    public void updateRoom(Room room){
+        RoomType r = roomTypeService.findOne(room.getRoomtypeId());
+        String type = r.getType();
+        room.setType(type);
+        roomService.update(room);
+    }
+    //删除房间
+    @RequestMapping("delete")
+    public void delete(String id){
+        roomService.delete(id);
     }
 }
