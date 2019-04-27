@@ -17,7 +17,7 @@
         })
         //创建表格
         $("#list").jqGrid({
-            url: "${pageContext.request.contextPath}/scheduled/findAll",
+            url: "${pageContext.request.contextPath}/checkIn/findAll",
             styleUI: 'Bootstrap',//使用bootstrap风格样式
             datatype: "json",
             autowidth: true,
@@ -27,37 +27,20 @@
             viewrecords: true,
             altRows:true,//奇偶行颜色
             rowNum: 10,
-            colNames: ["房间类型", "房号", "预定时间","预定入住时间","预定人","性别","电话","证件号码","预定状态","预约方式","押金","价格","操作"],
+            colNames: ["入住人", "性别","证件号码","电话","入住时间","更新时间","操作"],
             colModel: [
-                {name: "roomType.type", editable: true,sortable:false},
-                {name: "room.number", editable: true,sortable:true},
-                {name: "scheduledTime", editable: true,search:false,sortable:false},
-                {name: "checkinTime", editable: true,search:false,sortable:false},
-                {name: "scheduler", editable: true,sortable:false},
-                {name: "sex", editable: true,search:false,sortable:false},
-                {name: "phone", editable: true,sortable:false},
+                {name: "name", editable: true,sortable:false},
+                {name: "sex", editable: true,search:false,sortable:true},
                 {name: "idCard", editable: true,sortable:false},
-                {name: "status", editable: true,sortable:false},
-                {name: "mode", editable: true,sortable:false},
-                {name: "roomType.deposit", editable: true,search:false,sortable:false},
-                {name: "price", editable: true,search:false,sortable:false},
+                {name: "phone", editable: true,sortable:false},
+                {name: "checkinTime", editable: true,search:false,sortable:false},
+                {name: "updateTime", editable: true,search:false,sortable:false},
                 {
-                    name: "options",width:420,search:false,sortable:false,
+                    name: "options",width:335,search:false,sortable:false,
                     formatter: function (value, options, row) {
                         var content;
-                        if (row.status=="预定成功") {
                             content =
-                                "<button class='btn btn-info' onclick=\"checkIn('"+row.id+"')\">入住</button> "+
-                                "<button class='btn btn-success' onclick=\"cancel('"+row.id+"')\">取消</button> "+
-                                "<button class='btn btn-warning' onclick=\"modify('"+row.id+"','"+row.scheduler+"','"+row.sex+"','"+row.phone+"','"+row.idCard+"')\">修改</button> "+
                                 "<button class='btn btn-danger' onclick=\"del('"+row.id+"')\">删除</button> ";
-                        }else{
-                            content =
-                                "<button disabled class='btn btn-info' onclick=\"checkIn('"+row.id+"')\">入住</button> "+
-                                "<button disabled class='btn btn-success' onclick=\"cancel('"+row.id+"')\">取消</button> "+
-                                "<button disabled class='btn btn-warning' onclick=\"modify('"+row.id+"','"+row.scheduler+"','"+row.sex+"','"+row.phone+"','"+row.idCard+"')\">修改</button> "+
-                                "<button class='btn btn-danger' onclick=\"del('"+row.id+"')\">删除</button> ";
-                        }
                         return content;
                     }
                 },
@@ -73,7 +56,7 @@
                         $("#" + ids[ii] + " td").css("background-color", "#D1EEEE");
                     }
                     if (rowData.status == "已入住") {
-                        $("#" + ids[ii] + " td").css("background-color", "#dfeede");
+                        $("#" + ids[ii] + " td").css("background-color", "#ebc8ee");
                     }
                     if (rowData.status == "已取消") {
                         $("#" + ids[ii] + " td").css("background-color", "#EEEED1");
@@ -86,7 +69,7 @@
     //预定记录删除
     function del(id) {
         if(confirm("确定要删除吗？？？")==true){
-            $.post("${pageContext.request.contextPath}/scheduled/delete",{id:id},function () {
+            $.post("${pageContext.request.contextPath}/room/delete",{id:id},function () {
                 $("#list").trigger("reloadGrid");
             });
         }
@@ -137,9 +120,9 @@
         <ul id="myTab" class="nav nav-tabs">
             <li class="active"><a href="#roomlist" data-toggle="tab">预定列表</a></li>
         </ul>
-        <div id="myTabContent" class="tab-content" >
+        <div id="myTabContent" class="tab-content">
             <%--表格--%>
-            <div class="tab-pane fade in active" id="roomlist" >
+            <div class="tab-pane fade in active" id="roomlist">
                 <div class="tab-content" id="home">
                     <div role="tabpanel" class="tab-pane active">
                         <table id="list"></table>

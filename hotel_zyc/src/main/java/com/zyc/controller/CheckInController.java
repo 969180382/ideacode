@@ -2,16 +2,16 @@ package com.zyc.controller;
 
 import com.zyc.entity.Room;
 import com.zyc.entity.CheckIn;
+import com.zyc.entity.RoomType;
 import com.zyc.entity.Scheduled;
+import com.zyc.service.*;
 import com.zyc.service.CheckInService;
-import com.zyc.service.RoomService;
-import com.zyc.service.CheckInService;
-import com.zyc.service.ScheduledService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.sql.SQLOutput;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,6 +27,8 @@ public class CheckInController {
     private RoomService roomService;
     @Autowired
     private ScheduledService scheduledService;
+    @Autowired
+    private RoomTypeService roomTypeService;
     //房间页面添加入住
     @RequestMapping("add")
     public void add(CheckIn checkIn){
@@ -38,6 +40,8 @@ public class CheckInController {
         checkIn.setCheckinYear(year);
         checkIn.setCheckinMonth(month);
         checkIn.setUpdateTime(new Date());
+        checkIn.setStatus("已入住");
+
         Room roomAndType = roomService.findRoomAndType(checkIn.getRoomId());
         if(checkIn.getPrice()==null){
             checkIn.setPrice(roomAndType.getRoomType().getPriceDay());
@@ -45,6 +49,8 @@ public class CheckInController {
             double v = checkIn.getPrice() * roomAndType.getRoomType().getPriceHour();
             checkIn.setPrice(v);
         }
+        Double deposit = roomTypeService.findOne(roomService.findById(checkIn.getRoomId()).getRoomtypeId()).getDeposit();
+        checkIn.setDeposit(deposit);
         checkInService.add(checkIn);
         //修改房间状态
         Room room = new Room();
@@ -73,7 +79,11 @@ public class CheckInController {
         checkIn.setPrice(scheduled.getPrice());
         checkIn.setPhone(scheduled.getPhone());
         checkIn.setRoomId(scheduled.getNumber());
+        checkIn.setStatus("已入住");
+        Double deposit = roomTypeService.findOne(roomService.findById(scheduled.getNumber()).getRoomtypeId()).getDeposit();
+        checkIn.setDeposit(deposit);
         checkInService.add1(checkIn);
+
         //修改房间状态
         Room room = new Room();
         room.setId(scheduled.getNumber());

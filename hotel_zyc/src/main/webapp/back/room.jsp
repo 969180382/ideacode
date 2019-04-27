@@ -42,16 +42,18 @@
                         var content;
                         if (row.status=="空闲房") {
                             content =
-                                "<button class='btn btn-default' data-toggle='modal' data-target='#myModal2' onclick=\"details('"+row.id+"')\">详情</button> "+
-                                "<button class='btn btn-default' onclick=\"destine('"+row.id+"')\">预定</button> "+
-                                "<button class='btn btn-default' onclick=\"checkIn('"+row.id+"')\">入住</button> "+
-                                "<button class='btn btn-default' data-toggle='modal' data-target='#myModal1' onclick=\"details('"+row.id+"')\">修改</button> "+
+                                "<button class='btn btn-info' data-toggle='modal' data-target='#myModal2' onclick=\"details('"+row.id+"')\">详情</button> "+
+                                "<button class='btn btn-primary' onclick=\"destine('"+row.id+"')\">预定</button> "+
+                                "<button class='btn btn-success' onclick=\"checkIn('"+row.id+"')\">入住</button> "+
+                                "<button class='btn btn-warning' data-toggle='modal' data-target='#myModal1' onclick=\"details('"+row.id+"')\">修改</button> "+
                                 "<button class='btn btn-danger' onclick=\"del('"+row.id+"')\">删除</button> ";
                         }else{
                             content =
-                                "<button class='btn btn-default' data-toggle='modal' data-target='#myModal2' onclick=\"details('"+row.id+"')\">详情</button> "+
-                                "<button class='btn btn-default' data-toggle='modal' data-target='#myModal1' onclick=\"details('"+row.id+"')\">修改</button> "+
-                                "<button class='btn btn-danger' onclick=\"del('"+row.id+"')\">删除</button> ";
+                                "<button class='btn btn-info' data-toggle='modal' data-target='#myModal2' onclick=\"details('"+row.id+"')\">详情</button> "+
+                                "<button disabled class='btn btn-primary' onclick=\"destine('"+row.id+"')\">预定</button> "+
+                                "<button disabled class='btn btn-success' onclick=\"checkIn('"+row.id+"')\">入住</button> "+
+                                "<button disabled class='btn btn-warning' data-toggle='modal' data-target='#myModal1' onclick=\"details('"+row.id+"')\">修改</button> "+
+                                "<button disabled class='btn btn-danger' onclick=\"del('"+row.id+"')\">删除</button> ";
                         }
                         return content;
                     }
@@ -68,10 +70,10 @@
                         $("#" + ids[ii] + " td").css("background-color", "#D1EEEE");
                     }
                     if (rowData.status == "已入住") {
-                        $("#" + ids[ii] + " td").css("background-color", "#ebc8ee");
+                        $("#" + ids[ii] + " td").css("background-color", "#eeeedd");
                     }
                     if (rowData.status == "已预定") {
-                        $("#" + ids[ii] + " td").css("background-color", "#EEEED1");
+                        $("#" + ids[ii] + " td").css("background-color", "#eaeed2");
                     }
                 }
             }

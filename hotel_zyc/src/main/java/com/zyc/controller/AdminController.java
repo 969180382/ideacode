@@ -35,6 +35,6 @@ public class AdminController {
     @RequestMapping("safeOut")
     public String safeOut(HttpSession session){
         session.removeAttribute("admin");
-        return "login";
+        return "redirect:/login.jsp";
     }
 }

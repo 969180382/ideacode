@@ -78,4 +78,12 @@ public class ScheduledController {
         room.setStatus("空闲房");
         roomService.update(room);
     }
+    @RequestMapping("update")
+    public void update(Scheduled scheduled){
+        scheduledService.update(scheduled);
+    }
+    @RequestMapping("delete")
+    public void delete(String id){
+        scheduledService.delete(id);
+    }
 }

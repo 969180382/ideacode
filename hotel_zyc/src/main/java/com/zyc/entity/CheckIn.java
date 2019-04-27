@@ -33,5 +33,9 @@ public class CheckIn {
     private String roomId;
     private Double price;
     private String phone;
+    private String status;
+    private Double deposit;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date checkoutTime ;
 
 }

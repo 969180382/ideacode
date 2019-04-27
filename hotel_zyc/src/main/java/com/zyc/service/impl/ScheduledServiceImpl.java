@@ -51,4 +51,9 @@ public class ScheduledServiceImpl implements ScheduledService {
     public void update(Scheduled scheduled) {
         scheduledMapper.updateByPrimaryKeySelective(scheduled);
     }
+
+    @Override
+    public void delete(String id) {
+        scheduledMapper.deleteByPrimaryKey(id);
+    }
 }

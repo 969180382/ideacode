@@ -24,6 +24,7 @@
         body {
             /* Margin bottom by footer height */
             margin-bottom: 60px;
+
         }
 
         .footer {
@@ -62,7 +63,7 @@
         <div class="row">
             <div class="col-md-2">
                 <%--手风琴--%>
-                <div class="panel-group" id="accordion">
+                <div class="panel-group" id="accordion" >
 
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -138,7 +139,7 @@
                     <div class="panel-body">
                         <div class="container-fluid">
                             <%--<div class="jumbotron">--%>
-                                <img style="width: 100%; height: 70%" class="img-rounded" src="${app}/img/dba76b96299f9b08ab6cd345897c9942.jpg">
+                                <img style="width: 100%; height: 70%" class="img-rounded" src="${app}/img/111.jpg">
                             <%--</div>--%>
                         </div>
                     </div>

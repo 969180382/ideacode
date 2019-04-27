@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zyc.dao.CheckInMapper">
+    <select id="search" resultType="com.zyc.entity.Room">
+        select id,type,number,status,update_time as updateTime,remark,roomtype_id as roomtypeId from room
+        <where>
+            <if test="type !='' and type != null">
+                type like concat(concat("%",#{type}),"%")
+            </if>
+
+            <if test="number !='' and number != null">
+                and number like concat(concat("%",#{number}),"%")
+            </if>
+            <if test="status !='' and status != null">
+                and status like concat(concat("%",#{status}),"%")
+            </if>
+        </where>
+    </select>
+</mapper>

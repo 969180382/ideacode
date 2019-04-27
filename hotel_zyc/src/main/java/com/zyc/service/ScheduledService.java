@@ -12,4 +12,5 @@ public interface ScheduledService {
     Scheduled findOneById(String id);
 
     void update(Scheduled scheduled);
+    void delete(String id);
 }
